@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: extractor
+
+  output:
+    ansi:
+      enabled: always
+
+  jpa:
+#    hibernate:
+#      ddl-auto: update # 멀티 데이터 베이스에서 적용을 하려면, 2개의 구조로 분리를 해야 한다.
+    properties:
+      hibernate:
+        format_sql: true
+        show-sql: true
+        highlight_sql: true
+    defer-datasource-initialization: true
+
+  datasource:
+    raw:
+      driver-class-name: org.mariadb.jdbc.Driver
+      #url: jdbc:mariadb://127.0.0.1:3307/tmp_media?serverTimezone=Asia/Seoul
+      jdbc-url: jdbc:mariadb://127.0.0.1:3307/tmp_media?serverTimezone=Asia/Seoul
+      username: root
+      password: 1234
+
+#    processed:
+#      driver-class-name: org.mariadb.jdbc.Driver
+#      #url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
+#      jdbc-url: jdbc:mariadb://127.0.0.1:3306/debate_season?serverTimezone=Asia/Seoul
+#      username: sa
+#      password: password1234
+
+#    Local
+    processed:
+      driver-class-name: org.mariadb.jdbc.Driver
+      #url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
+      jdbc-url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
+      username: root
+      password: 1234
