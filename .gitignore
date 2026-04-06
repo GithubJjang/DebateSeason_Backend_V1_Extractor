@@ -34,7 +34,7 @@ out/
 /.nb-gradle/
 
 ### Core Prompt ###
-**/promp/
+**/com/debateseason/extractor/prompt/
 
 ### VS Code ###
 .vscode/
