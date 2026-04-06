@@ -96,5 +96,5 @@ src/
 
 ## 👤 Author
 
-* DebateSeason Team
+* DebateSeason Team(Developed by GithubJjang)
 
