@@ -60,7 +60,7 @@ public class ExtractScheduler {
 
 	private final BlockingQueue<RawMediaEntity> queue = new ArrayBlockingQueue<>(size);
 
-	private AtomicInteger count = new AtomicInteger(0);
+	private final AtomicInteger taskCount = new AtomicInteger(0);
 	private int target = 0;
 	private boolean lock = false;
 
@@ -71,15 +71,24 @@ public class ExtractScheduler {
 		// 원시 데이터 불러오기.
 		List<RawMediaEntity> rawMediaEntityList = rawMediaService.findOldestUnCheckedMediaOrderByIdAsc(size);
 
-		if(!lock){
-			target = rawMediaEntityList.size();
-			queue.addAll(rawMediaEntityList);
+		if(target==0){ // target=0만 수행 이후 종료가 될 경우, 하위 로직을 실행할 수 없다. 따라서 이를 해결 하기 위한 보상 로직.
+			taskCount.set(0);
+			lock = false;
+		}
 
+		if(!lock){ // 작업 초기화
+
+			// 전체 할당량
+			target = rawMediaEntityList.size();
+
+			// Queue를 사용하지 않을 경우, 어디까지 작업 수행을 완료했는지 매번 인덱스를 기록해야 하는 번거로움이 있다.
+			queue.addAll(rawMediaEntityList);
+			
 			lock=true;
 		}
 
 		// queue에 있는 것들 consume
-		if(count.get()!=target){
+		if(taskCount.get()!=target){ // 현재 완료한 작업 건수가 전체 할당량에 미치지 못할 경우, 남은 작업을 계속 수행한다.
 
 			while(!queue.isEmpty()){
 
@@ -99,7 +108,7 @@ public class ExtractScheduler {
 								.title(title)
 								.build();
 
-							if(mediaService.existsByTitle(title)==false){// 새로 시작을 한다.
+							if(!mediaService.existsByTitle(title)){// 새로 시작을 한다.
 
 								ExtractedWords extractedWords = sendRawMediaToLLM(crawlId,promptInput); // 추출된 고유명사 + 일반명사
 								MediaEntity mediaEntity = mediaManager.convertRawMediaToMedia(item); //
@@ -130,12 +139,9 @@ public class ExtractScheduler {
 							errorService.save(errorEntity);
 						}
 						finally {
-
 							// +1
-							count.incrementAndGet();
+							taskCount.incrementAndGet();
 						}
-
-
 					});
 				} catch (InterruptedException e) {
 
@@ -147,10 +153,8 @@ public class ExtractScheduler {
 		}
 		else{ //target = count이면, count를 갱신하자.
 			target = 0;
-			count.set(0);
-
+			taskCount.set(0);
 			lock = false;
-
 		}
 
 	}

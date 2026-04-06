@@ -24,17 +24,17 @@ spring:
       username: root
       password: 1234
 
-#    processed:
-#      driver-class-name: org.mariadb.jdbc.Driver
-#      #url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
-#      jdbc-url: jdbc:mariadb://127.0.0.1:3306/debate_season?serverTimezone=Asia/Seoul
-#      username: sa
-#      password: password1234
-
-#    Local
     processed:
       driver-class-name: org.mariadb.jdbc.Driver
       #url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
-      jdbc-url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
-      username: root
-      password: 1234
+      jdbc-url: jdbc:mariadb://127.0.0.1:3306/debate_season?serverTimezone=Asia/Seoul
+      username: sa
+      password: password1234
+
+#    Local
+#    processed:
+#      driver-class-name: org.mariadb.jdbc.Driver
+#      #url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
+#      jdbc-url: jdbc:mariadb://127.0.0.1:3307/debate?serverTimezone=Asia/Seoul
+#      username: root
+#      password: 1234
